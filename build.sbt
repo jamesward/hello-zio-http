@@ -1,10 +1,8 @@
-import com.typesafe.sbt.packager.docker.DockerPermissionStrategy
-
 lazy val zhttp = ProjectRef(uri(s"git://github.com/jamesward/zio-http.git"), "zhttp")
 
 dependsOn(zhttp)
 
-enablePlugins(LauncherJarPlugin, DockerPlugin)
+enablePlugins(GraalVMNativeImagePlugin)
 
 name := "hello-zio-http"
 
@@ -20,27 +18,33 @@ scalacOptions ++= Seq(
   "-Wvalue-discard",
 )
 
+libraryDependencies ++= Seq(
+  "org.scalameta" %% "svm-subs"     % "20.2.0",
+)
+
 Global / sources in (Compile,doc) := Seq.empty
 Global / publishArtifact in (Compile, packageDoc) := false
 
-dockerUpdateLatest := true
-dockerBaseImage := "gcr.io/distroless/java:11"
-daemonUserUid in Docker := None
-daemonUser in Docker := "root"
-dockerPermissionStrategy := DockerPermissionStrategy.None
-dockerEntrypoint := Seq("java", "-jar",s"/opt/docker/lib/${(artifactPath in packageJavaLauncherJar).value.getName}")
-dockerCmd :=  Seq.empty
-
-val maybeDockerSettings = sys.props.get("dockerImageUrl").flatMap { imageUrl =>
-  val parts = imageUrl.split("/")
-  if (parts.size == 3) {
-    Some((parts(0), parts(1), parts(2)))
-  }
-  else {
-    None
-  }
-}
-
-dockerRepository := maybeDockerSettings.map(_._1)
-dockerUsername := maybeDockerSettings.map(_._2)
-packageName in Docker := maybeDockerSettings.map(_._3).getOrElse(name.value)
+graalVMNativeImageOptions ++= Seq(
+  "--verbose",
+  "--no-server",
+  "--allow-incomplete-classpath",
+  "--no-fallback",
+  "--static",
+  "--install-exit-handlers",
+  "--libc=musl",
+  "-H:+ReportExceptionStackTraces",
+  "-H:+RemoveSaturatedTypeFlows",
+  "--initialize-at-run-time=io.netty.channel.epoll.Epoll",
+  "--initialize-at-run-time=io.netty.channel.epoll.Native",
+  "--initialize-at-run-time=io.netty.channel.epoll.EpollEventLoop",
+  "--initialize-at-run-time=io.netty.channel.epoll.EpollEventArray",
+  "--initialize-at-run-time=io.netty.channel.DefaultFileRegion",
+  "--initialize-at-run-time=io.netty.channel.kqueue.KQueueEventArray",
+  "--initialize-at-run-time=io.netty.channel.kqueue.KQueueEventLoop",
+  "--initialize-at-run-time=io.netty.channel.kqueue.Native",
+  "--initialize-at-run-time=io.netty.channel.unix.Errors",
+  "--initialize-at-run-time=io.netty.channel.unix.IovArray",
+  "--initialize-at-run-time=io.netty.channel.unix.Limits",
+  "--initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger",
+)
