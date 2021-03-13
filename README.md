@@ -6,6 +6,10 @@ Run Locally:
 ./sbt run
 ```
 
+Run on Cloud Run:
+
+[![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run)
+
 Containerize Locally as a GraalVM native image:
 ```
 ./sbt docker:publishLocal
@@ -13,9 +17,5 @@ Containerize Locally as a GraalVM native image:
 
 Run container:
 ```
-docker run -p8080:8080 hello-zio-http
+docker run -p8080:8080 hello-zio-http-graalvm
 ```
-
-Run on Cloud Run:
-
-[![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run)
