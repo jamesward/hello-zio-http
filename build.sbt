@@ -8,7 +8,7 @@ dependsOn(zhttp)
 
 enablePlugins(GraalVMNativeImagePlugin, DockerPlugin)
 
-name := "hello-zio-http"
+name := "hello-zio-http-graalvm"
 
 scalaVersion := "2.13.5"
 
