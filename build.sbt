@@ -6,7 +6,7 @@ dependsOn(zhttp)
 
 enablePlugins(LauncherJarPlugin, DockerPlugin)
 
-name := "hello-zio-http"
+name := "hello-zio-http-jvm"
 
 scalaVersion := "2.13.5"
 
