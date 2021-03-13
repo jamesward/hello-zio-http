@@ -8,7 +8,7 @@ Run Locally:
 
 Containerize Locally as a GraalVM native image:
 ```
-docker build -t hello-zio-http .
+./sbt docker:publishLocal
 ```
 
 Run container:
