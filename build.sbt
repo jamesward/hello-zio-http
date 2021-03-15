@@ -2,10 +2,6 @@ import com.typesafe.sbt.packager.docker.{Cmd, DockerPermissionStrategy, Dockerfi
 
 import java.io.ByteArrayInputStream
 
-lazy val zhttp = ProjectRef(uri(s"git://github.com/jamesward/zio-http.git"), "zhttp")
-
-dependsOn(zhttp)
-
 enablePlugins(GraalVMNativeImagePlugin, DockerPlugin)
 
 name := "hello-zio-http-graalvm"
@@ -23,6 +19,7 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
+  "io.d11" % "zhttp" % "1.0.0-RC1",
   "org.scalameta" %% "svm-subs"     % "20.2.0",
 )
 
