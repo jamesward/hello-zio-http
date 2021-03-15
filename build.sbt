@@ -1,9 +1,5 @@
 import com.typesafe.sbt.packager.docker.DockerPermissionStrategy
 
-lazy val zhttp = ProjectRef(uri(s"git://github.com/jamesward/zio-http.git"), "zhttp")
-
-dependsOn(zhttp)
-
 enablePlugins(LauncherJarPlugin, DockerPlugin)
 
 name := "hello-zio-http-jvm"
@@ -18,6 +14,10 @@ scalacOptions ++= Seq(
   "-Wconf:any:error",
   "-Wunused",
   "-Wvalue-discard",
+)
+
+libraryDependencies ++= Seq(
+  "io.d11" % "zhttp" % "1.0.0-RC1"
 )
 
 Global / sources in (Compile,doc) := Seq.empty
