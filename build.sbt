@@ -6,7 +6,7 @@ enablePlugins(GraalVMNativeImagePlugin, DockerPlugin)
 
 name := "hello-zio-http-graalvm"
 
-scalaVersion := "2.13.5"
+scalaVersion := "2.13.6"
 
 scalacOptions ++= Seq(
   "-unchecked",
@@ -19,8 +19,8 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "io.d11" % "zhttp" % "1.0.0-RC1",
-  "org.scalameta" %% "svm-subs"     % "20.2.0",
+  "io.d11" %% "zhttp" % "1.0.0.0-RC16",
+  "org.scalameta" %% "svm-subs" % "20.2.0",
 )
 
 Global / sources in (Compile,doc) := Seq.empty
@@ -34,7 +34,7 @@ genBaseImage := Def.task {
   val streams = Keys.streams.value
 
   val baseName = "ghcr.io/graalvm/graalvm-ce"
-  val tag = "21.0.0"
+  val tag = "21.1.0"
 
   val imageName = s"${baseName.replace('/', '-')}-native-image:$tag"
   import sys.process._
