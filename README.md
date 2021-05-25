@@ -17,5 +17,5 @@ Containerize Locally as a GraalVM native image:
 
 Run container:
 ```
-docker run -p8080:8080 hello-zio-http-graalvm
+docker run -p8080:8080 hello-zio-http-options-test
 ```

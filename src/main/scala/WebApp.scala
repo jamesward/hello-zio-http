@@ -5,7 +5,7 @@ import zio.{App, ExitCode, URIO}
 object WebApp extends App {
 
   val app = Http.collect[Request] {
-    case Method.GET -> Root => Response.text("hello, world")
+    case Method.OPTIONS -> Root => Response.status(Status.NO_CONTENT)
   }
 
   override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] = Server.start(8080, app).exitCode
