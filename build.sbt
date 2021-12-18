@@ -2,34 +2,24 @@ import com.typesafe.sbt.packager.docker.DockerPermissionStrategy
 
 enablePlugins(LauncherJarPlugin, DockerPlugin)
 
-name := "hello-zio-http-jvm"
-
-scalaVersion := "2.13.5"
-
-scalacOptions ++= Seq(
-  "-unchecked",
-  "-deprecation",
-  "-explaintypes",
-  "-feature",
-  "-Wconf:any:error",
-  "-Wunused",
-  "-Wvalue-discard",
-)
+scalaVersion := "2.13.7"
 
 libraryDependencies ++= Seq(
-  "io.d11" % "zhttp" % "1.0.0-RC1"
+  "dev.zio" %% "zio"         % "1.0.12",
+  "io.d11" %% "zhttp"        % "1.0.0.0-RC18",
 )
 
-Global / sources in (Compile,doc) := Seq.empty
-Global / publishArtifact in (Compile, packageDoc) := false
+Compile / doc / sources := Seq.empty
+Global / packageDoc / publishArtifact := true
+
 
 dockerUpdateLatest := true
 dockerBaseImage := "gcr.io/distroless/java:11"
-daemonUserUid in Docker := None
-daemonUser in Docker := "root"
+Docker / daemonUserUid := None
+Docker / daemonUser := "root"
 dockerPermissionStrategy := DockerPermissionStrategy.None
-dockerEntrypoint := Seq("java", "-jar",s"/opt/docker/lib/${(artifactPath in packageJavaLauncherJar).value.getName}")
-dockerCmd :=  Seq.empty
+dockerEntrypoint := Seq("java", "-jar", s"/opt/docker/lib/${(packageJavaLauncherJar / artifactPath).value.getName}")
+dockerCmd := Seq.empty
 
 val maybeDockerSettings = sys.props.get("dockerImageUrl").flatMap { imageUrl =>
   val parts = imageUrl.split("/")
@@ -43,4 +33,4 @@ val maybeDockerSettings = sys.props.get("dockerImageUrl").flatMap { imageUrl =>
 
 dockerRepository := maybeDockerSettings.map(_._1)
 dockerUsername := maybeDockerSettings.map(_._2)
-packageName in Docker := maybeDockerSettings.map(_._3).getOrElse(name.value)
+Docker / packageName := maybeDockerSettings.map(_._3).getOrElse(name.value)
