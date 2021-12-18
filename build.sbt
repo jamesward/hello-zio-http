@@ -2,10 +2,10 @@ import com.typesafe.sbt.packager.docker.DockerPermissionStrategy
 
 enablePlugins(LauncherJarPlugin, DockerPlugin)
 
-scalaVersion := "2.13.7"
+scalaVersion := "3.1.0"
 
 libraryDependencies ++= Seq(
-  "dev.zio" %% "zio"         % "1.0.12",
+  "dev.zio" %% "zio"         % "1.0.13",
   "io.d11" %% "zhttp"        % "1.0.0.0-RC18",
 )
 
