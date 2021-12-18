@@ -1,36 +1,39 @@
-import com.typesafe.sbt.packager.docker.DockerPermissionStrategy
-
-enablePlugins(LauncherJarPlugin, DockerPlugin)
+enablePlugins(GraalVMNativeImagePlugin)
 
 scalaVersion := "2.13.7"
 
 libraryDependencies ++= Seq(
-  "dev.zio" %% "zio"         % "1.0.12",
-  "io.d11" %% "zhttp"        % "1.0.0.0-RC18",
+  "dev.zio" %% "zio" % "1.0.12",
+  "io.d11" %% "zhttp" % "1.0.0.0-RC18",
+  "org.scalameta" %% "svm-subs" % "20.2.0",
 )
 
 Compile / doc / sources := Seq.empty
+makePom / publishArtifact := false
 Global / packageDoc / publishArtifact := true
 
 
-dockerUpdateLatest := true
-dockerBaseImage := "gcr.io/distroless/java:11"
-Docker / daemonUserUid := None
-Docker / daemonUser := "root"
-dockerPermissionStrategy := DockerPermissionStrategy.None
-dockerEntrypoint := Seq("java", "-jar", s"/opt/docker/lib/${(packageJavaLauncherJar / artifactPath).value.getName}")
-dockerCmd := Seq.empty
+graalVMNativeImageOptions ++= Seq(
+  "--static",
+  "--no-fallback",
+  "--install-exit-handlers",
+  "--enable-http",
+  "--initialize-at-run-time=io.netty.channel.DefaultFileRegion",
+  "--initialize-at-run-time=io.netty.channel.epoll.Native",
+  "--initialize-at-run-time=io.netty.channel.epoll.Epoll",
+  "--initialize-at-run-time=io.netty.channel.epoll.EpollEventLoop",
+  "--initialize-at-run-time=io.netty.channel.epoll.EpollEventArray",
+  "--initialize-at-run-time=io.netty.channel.kqueue.KQueue",
+  "--initialize-at-run-time=io.netty.channel.kqueue.KQueueEventLoop",
+  "--initialize-at-run-time=io.netty.channel.kqueue.KQueueEventArray",
+  "--initialize-at-run-time=io.netty.channel.kqueue.Native",
+  "--initialize-at-run-time=io.netty.channel.unix.Limits",
+  "--initialize-at-run-time=io.netty.channel.unix.Errors",
+  "--initialize-at-run-time=io.netty.channel.unix.IovArray",
+  "--allow-incomplete-classpath",
+)
 
-val maybeDockerSettings = sys.props.get("dockerImageUrl").flatMap { imageUrl =>
-  val parts = imageUrl.split("/")
-  if (parts.size == 3) {
-    Some((parts(0), parts(1), parts(2)))
-  }
-  else {
-    None
-  }
-}
 
-dockerRepository := maybeDockerSettings.map(_._1)
-dockerUsername := maybeDockerSettings.map(_._2)
-Docker / packageName := maybeDockerSettings.map(_._3).getOrElse(name.value)
+//fork := true
+
+//run / javaOptions += s"-agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image"

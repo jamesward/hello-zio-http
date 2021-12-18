@@ -12,10 +12,10 @@ Run on Cloud Run:
 
 Containerize Locally as a GraalVM native image:
 ```
-./sbt docker:publishLocal
+docker build -t hello-zio-http .
 ```
 
 Run container:
 ```
-docker run -p8080:8080 hello-zio-http-jvm
+docker run -it -p8080:8080 hello-zio-http
 ```
