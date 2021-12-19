@@ -1,5 +1,7 @@
 enablePlugins(GraalVMNativeImagePlugin)
 
+name := "hello-zio-http"
+
 scalaVersion := "2.13.7"
 
 libraryDependencies ++= Seq(
