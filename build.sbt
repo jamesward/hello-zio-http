@@ -1,36 +1,20 @@
-import com.typesafe.sbt.packager.docker.DockerPermissionStrategy
+enablePlugins(LauncherJarPlugin)
 
-enablePlugins(LauncherJarPlugin, DockerPlugin)
+name := "hello-zio-http"
 
-scalaVersion := "2.13.7"
+scalaVersion := "3.7.4"
 
 libraryDependencies ++= Seq(
-  "dev.zio" %% "zio"         % "1.0.12",
-  "io.d11" %% "zhttp"        % "1.0.0.0-RC18",
+  "dev.zio" %% "zio"                 % "2.1.24",
+  "dev.zio" %% "zio-config-typesafe" % "4.0.6",
+  "dev.zio" %% "zio-http"            % "3.7.4",
+  "org.slf4j" % "slf4j-simple"       % "2.0.17",
 )
 
+Compile / packageDoc / publishArtifact := false
+
 Compile / doc / sources := Seq.empty
-Global / packageDoc / publishArtifact := true
 
+fork := true
 
-dockerUpdateLatest := true
-dockerBaseImage := "gcr.io/distroless/java:11"
-Docker / daemonUserUid := None
-Docker / daemonUser := "root"
-dockerPermissionStrategy := DockerPermissionStrategy.None
-dockerEntrypoint := Seq("java", "-jar", s"/opt/docker/lib/${(packageJavaLauncherJar / artifactPath).value.getName}")
-dockerCmd := Seq.empty
-
-val maybeDockerSettings = sys.props.get("dockerImageUrl").flatMap { imageUrl =>
-  val parts = imageUrl.split("/")
-  if (parts.size == 3) {
-    Some((parts(0), parts(1), parts(2)))
-  }
-  else {
-    None
-  }
-}
-
-dockerRepository := maybeDockerSettings.map(_._1)
-dockerUsername := maybeDockerSettings.map(_._2)
-Docker / packageName := maybeDockerSettings.map(_._3).getOrElse(name.value)
+javaOptions += "-Djava.net.preferIPv4Stack=true"

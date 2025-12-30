@@ -1,11 +1,16 @@
-import zhttp.http._
-import zhttp.service.Server
-import zio.{App, ExitCode, URIO}
+import zio.*
+import zio.config.typesafe.*
+import zio.http.*
+import zio.http.codec.PathCodec
 
-object WebApp extends App {
+object WebApp extends ZIOAppDefault:
 
-  val app = Http.text("hello, world")
+  override val bootstrap: ZLayer[ZIOAppArgs, Any, Any] =
+    Runtime.setConfigProvider(ConfigProvider.fromResourcePath())
 
-  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] = Server.start(8080, app).exitCode
+  val routes =
+    Routes(
+      Method.GET / PathCodec.empty -> handler(Response.text("hello, world"))
+    )
 
-}
+  def run = Server.serve(routes).provide(Server.configured())
