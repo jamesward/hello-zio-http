@@ -1,4 +1,0 @@
-[submodule "zio-redis"]
-	path = zio-redis
-	url = https://github.com/jamesward/zio-redis.git
-	branch = no_cert_verify
