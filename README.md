@@ -1,7 +1,7 @@
 Hello ZIO HTTP
 --------------
 
-Run Locally:
+Run Locally with embedded Redis:
 ```
-./sbt run
+./sbt ~reStart
 ```
