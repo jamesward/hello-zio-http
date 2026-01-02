@@ -25,8 +25,19 @@ fork := true
 
 javaOptions += "-Djava.net.preferIPv4Stack=true"
 
-// it'd be cool if we could just run `~Test/reStart` and have it use the right scope
-reStart / mainClass := Some("WebAppTest")
-reStart / fullClasspath := (Test / fullClasspath).value
-//Test / reStart / mainClass := Some("WebAppTest")
-//Test / reStart / fullClasspath := (Test / fullClasspath).value
+lazy val reStartTest =
+  inputKey[spray.revolver.AppProcess]("re-start, but test")
+
+reStartTest :=
+  Def.inputTask {
+    spray.revolver.Actions.restartApp(
+      streams.value,
+      reLogTag.value,
+      thisProjectRef.value,
+      reForkOptions.value,
+      Some("WebAppTest"),
+      (Test / fullClasspath).value,
+      reStartArgs.value,
+      spray.revolver.Actions.startArgsParser.parsed
+    )
+  }.dependsOn(Compile / products).evaluated

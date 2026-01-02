@@ -1,7 +1,13 @@
 Hello ZIO HTTP
 --------------
 
-Run Locally with embedded Redis:
+Run with embedded Redis:
 ```
+./sbt ~reStartTest
+```
+
+Run for production:
+```
+export REDIS_URL=YOUR_REDIS_URL
 ./sbt ~reStart
 ```
