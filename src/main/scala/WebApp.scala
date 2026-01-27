@@ -39,22 +39,12 @@ object WebApp extends ZIOAppDefault:
     ZLayer.fromZIO:
      defer:
        val uri = redisUri.run
-       RedisConfig(uri.getHost, uri.getPort, ssl = true, verifyCertificate = false)
-
-  // may not work with reconnects
-  val redisAuthLayer: ZLayer[CodecSupplier & RedisConfig, Throwable, Redis] =
-    Redis.singleNode.flatMap:
-      env =>
-        ZLayer.fromZIO:
-          defer:
-            val uri = redisUri.run
-            val redis = env.get[Redis]
-            val password = uri.getUserInfo.drop(1) // REDIS_URL has an empty username
-            redis.auth(password).as(redis).run
+       val password = uri.getUserInfo.drop(1)
+       RedisConfig(uri.getHost, uri.getPort, ssl = true, verifyCertificate = false, auth = Some(RedisConfig.Auth(password)))
 
   def run = Server.serve(routes).provide(
     Server.configured(),
     redisConfigLayer,
-    redisAuthLayer,
+    Redis.singleNode,
     ZLayer.succeed[CodecSupplier](ProtobufCodecSupplier),
   )
