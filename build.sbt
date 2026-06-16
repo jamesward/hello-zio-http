@@ -1,4 +1,4 @@
-enablePlugins(LauncherJarPlugin)
+enablePlugins(JavaAppPackaging)
 
 name := "hello-zio-http"
 
