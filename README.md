@@ -1,7 +1,7 @@
 Hello ZIO HTTP
 --------------
 
-Run Locally:
+Run Locally (auto-restart):
 ```
-./sbt run
+./sbt ~runRestart
 ```
