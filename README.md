@@ -1,13 +1,13 @@
 Hello ZIO HTTP
 --------------
 
-Run with embedded Redis:
+Run with a Valkey Testcontainer (requires Docker):
 ```
-./sbt ~reStartTest
+./sbt ~Test/runReload
 ```
 
 Run for production:
 ```
 export REDIS_URL=YOUR_REDIS_URL
-./sbt ~reStart
+./sbt run
 ```
