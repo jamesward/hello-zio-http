@@ -2,7 +2,7 @@ enablePlugins(JavaAppPackaging)
 
 name := "hello-zio-http"
 
-scalaVersion := "3.8.4"
+scalaVersion := "3.9.0"
 
 libraryDependencies ++= Seq(
   "dev.zio" %% "zio"                 % "2.1.26",
