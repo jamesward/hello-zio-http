@@ -8,7 +8,7 @@ libraryDependencies ++= Seq(
   "dev.zio" %% "zio"                 % "2.1.26",
   "dev.zio" %% "zio-config-typesafe" % "4.0.8",
   "dev.zio" %% "zio-http"            % "3.11.4",
-  "org.slf4j" % "slf4j-simple"       % "2.0.18",
+  "org.slf4j" % "slf4j-simple"       % "2.0.19",
 )
 
 Compile / packageDoc / publishArtifact := false
