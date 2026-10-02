@@ -16,3 +16,13 @@ Compile / packageDoc / publishArtifact := false
 Compile / doc / sources := Seq.empty
 
 javaOptions += "-Djava.net.preferIPv4Stack=true"
+
+// sbt-mcp (loopback-only: its tools can execute build tasks)
+Global / mcpEnabled := true
+Global / mcpHost := "127.0.0.1"
+Global / mcpPort := 5103
+
+// SkillsJars: extract agent Skills with `./sbt extractSkillsJars`
+skillsJarsOutputDir := Some(file(".kiro/skills"))
+
+libraryDependencies += "com.jamesward" % "skills" % "0.0.10" % Skills
