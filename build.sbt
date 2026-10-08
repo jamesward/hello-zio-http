@@ -2,7 +2,7 @@ enablePlugins(JavaAppPackaging)
 
 name := "hello-zio-http"
 
-scalaVersion := "3.9.0"
+scalaVersion := "3.10.0"
 
 libraryDependencies ++= Seq(
   "dev.zio" %% "zio"                 % "2.1.26",
@@ -25,4 +25,4 @@ Global / mcpPort := 5103
 // SkillsJars: extract agent Skills with `./sbt extractSkillsJars`
 skillsJarsOutputDir := Some(file(".kiro/skills"))
 
-libraryDependencies += "com.jamesward" % "skills" % "0.0.10" % Skills
+libraryDependencies += "com.jamesward" % "skills" % "0.0.12" % Skills
