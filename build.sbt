@@ -2,11 +2,11 @@ enablePlugins(JavaAppPackaging)
 
 name := "hello-zio-http"
 
-scalaVersion := "3.10.0"
+scalaVersion := "3.10.1"
 
 libraryDependencies ++= Seq(
   "dev.zio" %% "zio"                 % "2.1.27",
-  "dev.zio" %% "zio-config-typesafe" % "4.1.0",
+  "dev.zio" %% "zio-config-typesafe" % "4.1.2",
   "dev.zio" %% "zio-http"            % "3.11.6",
   "org.slf4j" % "slf4j-simple"       % "2.0.20",
 )
@@ -20,4 +20,4 @@ javaOptions += "-Djava.net.preferIPv4Stack=true"
 // SkillsJars: extract agent Skills with `./sbta extractSkillsJars`
 skillsJarsOutputDir := Some(file(".kiro/skills"))
 
-libraryDependencies += "com.jamesward" % "skills" % "0.0.24" % Skills
+libraryDependencies += "com.jamesward" % "skills" % "0.0.26" % Skills
